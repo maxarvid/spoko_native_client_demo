@@ -1,10 +1,24 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Appbar } from "react-native-paper";
+import Articles from "./components/modules/articles";
 
 const App = () => {
-  const { appTitle } = useSelector((state) => state);
+  const { appTitle, articles } = useSelector((state) => state);
+
+  useEffect(() => {
+    Articles.index();
+  }, []);
+
+  let categories;
+
+  if (articles) {
+    categories = Object.keys(articles).map((category) => {
+      return <Text keys={category}>{category}</Text>;
+    });
+  }
+
   return (
     <View style={styles.container}>
       <Appbar.Header style={styles.appBarBg}>
@@ -12,11 +26,7 @@ const App = () => {
           title={<Text style={styles.appBarContent}>{appTitle}</Text>}
         />
       </Appbar.Header>
-      <Text>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit quam
-        explicabo, quae hic itaque impedit voluptas ex quia, minima provident,
-        modi nemo obcaecati sapiente! Qui soluta vero rem ut illum.
-      </Text>
+      {articles && <Text>We have articles for {categories} categories</Text>}
     </View>
   );
 };
